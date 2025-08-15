@@ -1,7 +1,7 @@
 import { createRoute, Link, type RootRoute } from "@tanstack/react-router";
 import { LogIn, User } from "lucide-react";
 import { useOptionalUser, useTechNewsTopics } from "@/lib/hooks";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 
 
@@ -18,8 +18,12 @@ type NewsData = {
   articles: Article[];
 };
 
-function NewsGrid() {
-  const { data, isLoading, error } = useTechNewsTopics() as { data: NewsData; isLoading: boolean; error: unknown };
+interface NewsGridProps {
+  query: string;
+}
+
+function NewsGrid({ query }: NewsGridProps) {
+  const { data, isLoading, error } = useTechNewsTopics(query ? { q: query } : undefined) as { data: NewsData; isLoading: boolean; error: unknown };
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
 
   if (isLoading) {
@@ -35,7 +39,7 @@ function NewsGrid() {
   return (
     <div>
       <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
-        <span role="img" aria-label="tech">📰</span> Notícias de Tecnologia
+        <span role="img" aria-label="tech">📰</span> Notícias
       </h2>
       {data.topics && data.topics.length > 0 && (
         <div className="mb-6 flex flex-wrap gap-2">
@@ -111,6 +115,20 @@ function NewsGrid() {
 
 function HomePage() {
   const user = useOptionalUser();
+  const [query, setQuery] = useState("");
+  const [inputValue, setInputValue] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
+  // Para UX: submit ao pressionar Enter
+  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      setQuery(inputValue.trim());
+    }
+  };
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setQuery(inputValue.trim());
+    inputRef.current?.blur();
+  };
 
   return (
     <div className="bg-slate-900 min-h-screen flex items-center justify-center p-6">
@@ -166,9 +184,30 @@ function HomePage() {
           </div>
         </div>
 
+        {/* Busca por notícias */}
+        <form onSubmit={handleSubmit} className="mb-8 flex items-center gap-2 max-w-xl mx-auto">
+          <input
+            ref={inputRef}
+            type="text"
+            placeholder="Buscar notícias..."
+            className="flex-1 px-4 py-2 rounded-l bg-slate-800 text-slate-100 border border-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-600 placeholder:text-slate-400"
+            value={inputValue}
+            onChange={e => setInputValue(e.target.value)}
+            onKeyDown={handleInputKeyDown}
+            aria-label="Buscar notícias"
+          />
+          <Button
+            type="submit"
+            className="rounded-l-none rounded-r px-4 py-2 bg-blue-700 text-white hover:bg-blue-800 border border-blue-700"
+            disabled={!inputValue.trim() || inputValue.trim() === query}
+          >
+            Buscar
+          </Button>
+        </form>
+
         {/* News Section */}
         <div className="mb-12">
-          <NewsGrid />
+          <NewsGrid query={query} />
         </div>
 
         {/* Footer */}
