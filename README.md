@@ -1,90 +1,115 @@
-# Deco MCP app
+# AI News Agent: News, Summaries & Podcasts Delivered to You
 
-A full-stack template for building
-[Model Context Protocol (MCP)](https://spec.modelcontextprotocol.io/) servers
-with a modern React frontend. This template provides a complete development
-environment where your MCP server not only exposes tools and workflows to AI
-agents but also serves a beautiful web interface built with React and Tailwind
-CSS.
+Este projeto é uma plataforma full-stack com IA que encontra notícias relevantes para o usuário, resume ou converte o conteúdo em formato de podcast e envia automaticamente por email. Utiliza o Model Context Protocol (MCP) para orquestração de workflows, um frontend moderno em React e um backend robusto rodando em Cloudflare Workers.
 
-## ✨ Features
+---
 
-- **🤖 MCP Server**: Cloudflare Workers-based server with typed tools and
-  workflows
-- **⚛️ React Frontend**: Modern React app with Vite, TanStack Router, and
-  Tailwind CSS
-- **🎨 UI Components**: Pre-configured shadcn/ui components for rapid
-  development
-- **🔧 Type Safety**: Full TypeScript support with auto-generated RPC client
-  types
-- **🚀 Hot Reload**: Live development with automatic rebuilding for both
-  frontend and backend
-- **☁️ Ready to Deploy**: One-command deployment to Cloudflare Workers
+## � What does it do?
 
-## 🚀 Quick Start
+1. **Busca Inteligente de Notícias**: O agente AI pesquisa notícias de tecnologia relevantes para o usuário, com filtros e busca personalizada.
+2. **Resumo & Conversão para Podcast**: As notícias podem ser resumidas por IA ou convertidas em áudio/podcast automaticamente.
+3. **Envio Automático por Email**: O conteúdo selecionado é enviado para o usuário por email, pronto para ser lido ou ouvido.
 
-### Prerequisites
+---
+
+## 🧩 Arquitetura do Projeto
+
+```
+├── server/           # Backend MCP Server (Cloudflare Workers + Deco runtime)
+│   ├── main.ts      # Entry point: define ferramentas, workflows e integrações
+│   ├── tools.ts     # Ferramentas: busca notícias, resumo, TTS, email
+│   ├── workflows.ts # Orquestração: fluxo buscar → resumir → podcast → enviar
+│   └── deco.gen.ts  # Tipos auto-gerados para integração
+└── view/            # Frontend React (Vite + Tailwind CSS)
+    ├── src/
+    │   ├── lib/rpc.ts    # Cliente RPC tipado para comunicação
+    │   ├── routes/       # Rotas TanStack Router (ex: home, profile)
+    │   └── components/   # UI components (Tailwind, shadcn/ui)
+    └── package.json
+```
+
+---
+
+## � Como Funciona (Ponta a Ponta)
+
+### 1. Usuário Interage pelo Frontend
+
+- Busca notícias por tema ou palavra-chave na interface React moderna.
+- Visualiza resultados, tópicos sugeridos e pode clicar para detalhes.
+
+### 2. Backend Orquestra o Workflow
+
+- O frontend chama o workflow MCP via RPC.
+- O workflow executa:
+  1. **Busca notícias** (API externa, ex: NewsAPI)
+  2. **Filtra e resume** notícias relevantes usando IA
+  3. **Converte texto em áudio** (TTS/podcast)
+  4. **Envia email** com o conteúdo (resumo e/ou podcast)
+
+### 3. Entrega Automática
+
+- O usuário recebe o conteúdo por email, pronto para consumir.
+- O sistema pode ser expandido para agendamento, preferências, etc.
+
+---
+
+## 🛠️ Principais Tecnologias
+
+- **MCP (Model Context Protocol)**: Orquestração de workflows e ferramentas
+- **Cloudflare Workers**: Backend serverless, rápido e escalável
+- **React + Vite + Tailwind CSS**: Frontend moderno e responsivo
+- **TanStack Router**: Navegação avançada no frontend
+- **shadcn/ui**: Componentes de UI prontos para uso
+- **TypeScript**: Tipagem forte ponta a ponta
+
+---
+
+## 🚀 Como Rodar Localmente
+
+### Pré-requisitos
 
 - Node.js ≥22.0.0
 - [Deco CLI](https://deco.chat): `npm i -g deco-cli`
 
-### Setup
+### Passos
 
 ```bash
-# Install dependencies
+# Instale as dependências
 npm install
 
-# Configure your app
-npm run configure
+# Configure o app (variáveis, integrações)
 
-# Start development server
+
+# Rode o servidor de desenvolvimento
 npm run dev
 ```
 
-The server will start on `http://localhost:8787` serving both your MCP endpoints
-and the React frontend.
-
-## 📁 Project Structure
-
-```
-├── server/           # MCP Server (Cloudflare Workers + Deco runtime)
-│   ├── main.ts      # Server entry point with tools & workflows
-│   └── deco.gen.ts  # Auto-generated integration types
-└── view/            # React Frontend (Vite + Tailwind CSS)
-    ├── src/
-    │   ├── lib/rpc.ts    # Typed RPC client for server communication
-    │   ├── routes/       # TanStack Router routes
-    │   └── components/   # UI components with Tailwind CSS
-    └── package.json
-```
-
-## 🛠️ Development Workflow
-
-- **`npm run dev`** - Start development with hot reload
-- **`npm run gen`** - Generate types for external integrations
-- **`npm run gen:self`** - Generate types for your own tools/workflows
-- **`npm run deploy`** - Deploy to production
-
-## 🔗 Frontend ↔ Server Communication
-
-The template includes a fully-typed RPC client that connects your React frontend
-to your MCP server:
-
-```typescript
-// Typed calls to your server tools and workflows
-const result = await client.MY_TOOL({ input: "data" });
-const workflowResult = await client.MY_WORKFLOW({ input: "data" });
-```
-
-## 📖 Learn More
-
-This template is built for deploying primarily on top of the
-[Deco platform](https://deco.chat/about) which can be found at the
-[deco-cx/chat](https://github.com/deco-cx/chat) repository.
-
-Documentation can be found at [https://docs.deco.page](https://docs.deco.page)
+O app estará disponível em `http://localhost:8787`.
 
 ---
 
-**Ready to build your next MCP server with a beautiful frontend?
-[Get started now!](https://deco.chat)**
+## ✨ Exemplos de Uso
+
+- Buscar "inteligência artificial" → Receber resumo e podcast das principais notícias no email
+- Agendar envio diário de notícias de tecnologia
+- Receber apenas notícias positivas ou de fontes confiáveis
+
+---
+
+## 📖 Expansão e Customização
+
+- Adicione novas fontes de notícias facilmente em `server/tools.ts`
+- Personalize o workflow em `server/workflows.ts` (ex: adicionar tradução, filtros, etc)
+- Modifique o frontend em `view/src/routes/home.tsx` para novas experiências
+
+---
+
+## 📚 Saiba Mais
+
+- [Model Context Protocol (MCP)](https://spec.modelcontextprotocol.io/)
+- [Deco Platform](https://deco.chat/about)
+- [Documentação Deco](https://docs.deco.page)
+
+---
+
+**Pronto para transformar notícias em experiências personalizadas com IA?**
