@@ -15,7 +15,7 @@ export const views: CreateMCPServerOptions<Env, typeof StateSchema>["views"] =
     {
       title: "Tech News AI Agent",
       icon: "auto_awesome",
-      url: "https://tech-news-agent.deco.page", // Substitua pela URL real se necessário
+      url: "https://yuri-camp-2.deco.page/",
       description: "Veja tópicos e notícias positivas de tecnologia filtradas por IA.",
     },
   ];
