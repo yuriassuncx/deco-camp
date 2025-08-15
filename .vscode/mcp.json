@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "yuri-camp-2": {
+      "type": "http",
+      "url": "https://localhost-6c111b63.deco.host/mcp"
+    }
+  }
+}
