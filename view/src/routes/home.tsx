@@ -1,9 +1,8 @@
 import { createRoute, Link, type RootRoute } from "@tanstack/react-router";
-import { LogIn, User } from "lucide-react";
+import { LogIn, User, Volume2 } from "lucide-react";
 import { useOptionalUser, useTechNewsTopics } from "@/lib/hooks";
 import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
-
 
 type Article = {
   title: string;
@@ -25,6 +24,14 @@ interface NewsGridProps {
 function NewsGrid({ query }: NewsGridProps) {
   const { data, isLoading, error } = useTechNewsTopics(query ? { q: query } : undefined) as { data: NewsData; isLoading: boolean; error: unknown };
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
+
+  const handleSpeak = (article: Article) => {
+    if (typeof window !== "undefined") {
+      window.speechSynthesis.cancel(); // Para qualquer fala anterior
+      const text = `${article.title}. ${article.description ?? ""}`;
+      window.speechSynthesis.speak(new window.SpeechSynthesisUtterance(text));
+    }
+  };
 
   if (isLoading) {
     return <div className="text-slate-300 text-center py-12">Carregando notícias...</div>;
@@ -80,7 +87,12 @@ function NewsGrid({ query }: NewsGridProps) {
           <div className="bg-slate-900 rounded-xl shadow-2xl max-w-lg w-full mx-4 p-6 relative animate-fade-in">
             <button
               className="absolute top-3 right-3 text-slate-400 hover:text-white text-xl font-bold focus:outline-none"
-              onClick={() => setSelectedArticle(null)}
+              onClick={() => {
+                if (typeof window !== "undefined") {
+                  window.speechSynthesis.cancel(); // Para o TTS ao fechar o modal
+                }
+                setSelectedArticle(null);
+              }}
               aria-label="Fechar"
             >
               ×
@@ -98,14 +110,25 @@ function NewsGrid({ query }: NewsGridProps) {
                 {selectedArticle.description}
               </p>
             )}
-            <a
-              href={selectedArticle.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block mt-2 px-4 py-2 bg-blue-700 text-white rounded hover:bg-blue-800 transition-colors font-medium shadow"
-            >
-              Ler notícia completa
-            </a>
+            <div className="flex gap-2">
+              <a
+                href={selectedArticle.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block px-4 py-2 bg-blue-700 text-white rounded hover:bg-blue-800 transition-colors font-medium shadow"
+              >
+                Ler notícia completa
+              </a>
+              <button
+                type="button"
+                onClick={() => handleSpeak(selectedArticle)}
+                className="inline-flex items-center px-3 py-2 bg-slate-700 text-white rounded hover:bg-blue-700 transition-colors font-medium shadow gap-2"
+                aria-label="Ouvir notícia"
+              >
+                <Volume2 className="w-4 h-4" />
+                Ouvir
+              </button>
+            </div>
           </div>
         </div>
       )}
