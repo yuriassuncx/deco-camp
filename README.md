@@ -1,14 +1,23 @@
 # AI News Agent: News, Summaries & Podcasts Delivered to You
 
-Este projeto é uma plataforma full-stack com IA que encontra notícias relevantes para o usuário, resume ou converte o conteúdo em formato de podcast e envia automaticamente por email. Utiliza o Model Context Protocol (MCP) para orquestração de workflows, um frontend moderno em React e um backend robusto rodando em Cloudflare Workers.
+Este projeto é uma plataforma full-stack com IA que encontra notícias relevantes
+para o usuário, resume ou converte o conteúdo em formato de podcast e envia
+automaticamente por email. Utiliza o Model Context Protocol (MCP) para
+orquestração de workflows, um frontend moderno em React e um backend robusto
+rodando em Cloudflare Workers.
 
 ---
 
-## � What does it do?
+## 💡 O que faz?
 
-1. **Busca Inteligente de Notícias**: O agente AI pesquisa notícias de tecnologia relevantes para o usuário, com filtros e busca personalizada.
-2. **Resumo & Conversão para Podcast**: As notícias podem ser resumidas por IA ou convertidas em áudio/podcast automaticamente.
-3. **Envio Automático por Email**: O conteúdo selecionado é enviado para o usuário por email, pronto para ser lido ou ouvido.
+1. **Busca Inteligente de Notícias**: O agente AI pesquisa notícias de
+   tecnologia relevantes para o usuário, com filtros e busca personalizada.
+2. **Resumo & Conversão para Podcast**: As notícias podem ser resumidas por IA
+   ou convertidas em áudio/podcast automaticamente.
+3. **Leitura de Notícias via TTS**: O usuário pode ouvir o conteúdo das notícias
+   diretamente no navegador usando Text-to-Speech (TTS) integrado à interface.
+4. **Envio Automático por Email**: O conteúdo selecionado é enviado para o
+   usuário por email, pronto para ser lido ou ouvido.
 
 ---
 
@@ -30,12 +39,26 @@ Este projeto é uma plataforma full-stack com IA que encontra notícias relevant
 
 ---
 
-## � Como Funciona (Ponta a Ponta)
+## 🗣️ Text-to-Speech (TTS) no Frontend
+
+- Utilizamos a biblioteca
+  [`text-to-speech-js`](https://www.npmjs.com/package/text-to-speech-js) para
+  permitir que o usuário ouça o conteúdo das notícias diretamente no navegador.
+- O botão "Ouvir" está disponível no modal de cada notícia. Ao clicar, o texto é
+  lido em voz alta usando a
+  [SpeechSynthesis API](https://developer.mozilla.org/pt-BR/docs/Web/API/SpeechSynthesis).
+- O áudio é interrompido automaticamente ao fechar o modal ou ao iniciar uma
+  nova leitura, evitando sobreposição de vozes.
+
+---
+
+## 🚦 Como Funciona (Ponta a Ponta)
 
 ### 1. Usuário Interage pelo Frontend
 
 - Busca notícias por tema ou palavra-chave na interface React moderna.
 - Visualiza resultados, tópicos sugeridos e pode clicar para detalhes.
+- Pode ouvir o conteúdo das notícias com um clique, graças ao TTS integrado.
 
 ### 2. Backend Orquestra o Workflow
 
@@ -61,6 +84,7 @@ Este projeto é uma plataforma full-stack com IA que encontra notícias relevant
 - **TanStack Router**: Navegação avançada no frontend
 - **shadcn/ui**: Componentes de UI prontos para uso
 - **TypeScript**: Tipagem forte ponta a ponta
+- **text-to-speech-js**: Leitura de notícias via TTS no navegador
 
 ---
 
@@ -79,7 +103,6 @@ npm install
 
 # Configure o app (variáveis, integrações)
 
-
 # Rode o servidor de desenvolvimento
 npm run dev
 ```
@@ -90,7 +113,9 @@ O app estará disponível em `http://localhost:8787`.
 
 ## ✨ Exemplos de Uso
 
-- Buscar "inteligência artificial" → Receber resumo e podcast das principais notícias no email
+- Buscar "inteligência artificial" → Receber resumo e podcast das principais
+  notícias no email
+- Ouvir notícias de tecnologia diretamente no navegador com um clique
 - Agendar envio diário de notícias de tecnologia
 - Receber apenas notícias positivas ou de fontes confiáveis
 
@@ -99,7 +124,8 @@ O app estará disponível em `http://localhost:8787`.
 ## 📖 Expansão e Customização
 
 - Adicione novas fontes de notícias facilmente em `server/tools.ts`
-- Personalize o workflow em `server/workflows.ts` (ex: adicionar tradução, filtros, etc)
+- Personalize o workflow em `server/workflows.ts` (ex: adicionar tradução,
+  filtros, etc)
 - Modifique o frontend em `view/src/routes/home.tsx` para novas experiências
 
 ---
@@ -112,4 +138,4 @@ O app estará disponível em `http://localhost:8787`.
 
 ---
 
-**Pronto para transformar notícias em experiências personalizadas com IA?**
+**Pronto para transformar notícias em experiências personalizadas com
